@@ -19,7 +19,14 @@ class DepartmentsViewController: UIViewController, UITableViewDelegate, UITableV
     public var directionImage : UIImage?
     public var directionName : String?
     
-    private var departmentsArray = [String]()
+    private var departmentsArray = [(id: String, name: String)]()
+    private var data : [[String]] = [
+        ["90 бюджетных мест", "400 000 рублей в год", "Обучение ведется на русском языке"],
+        ["Математика  (минимальный балл: 60)", "Иностранный язык  (минимальный балл: 50)", "Русский язык  (минимальный балл: 60)", "Список олимпиад, дающих льготы"],
+        ["IT-специалист"],
+        ["Дискретная математика", "Экономическая теория", "Управление IT-проектами"],
+        ["-"]
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,24 +58,33 @@ class DepartmentsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Department Cell") as! DepartmentsTableViewCell
-        cell.departmentLabel.text = departmentsArray[indexPath.row]
+        cell.departmentLabel.text = departmentsArray[indexPath.row].name
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "Show Department Info", sender: self)
-        self.navigationItem.title = ""
-        //set up data transfer
+        performSegue(withIdentifier: "Show Department Info", sender: indexPath)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show Department Info"{
+            self.navigationItem.title = ""
+            let destinationVC = segue.destination as! DepartmentInfoViewController
+            let index = (sender as! IndexPath).row
+            destinationVC.data = self.data
+            destinationVC.departmentName = self.departmentsArray[index].name
+        }
+    }
+  
     
     private func fetchDepartments(){
         let url = URL(string: "http://abitir.styleru.net/api/getFacultiesByDirId")
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
-        let postString = "id=2" //+ (self.directionID ?? "0")
+        let postString = "id=" + (self.directionID ?? "0")
         request.httpBody = postString.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard data != nil, error == nil else{
+        let task = URLSession.shared.dataTask(with: request) { (dataX, response, error) in
+            guard dataX != nil, error == nil else{
                 print("error : \(error)")
                 return
             }
@@ -79,9 +95,9 @@ class DepartmentsViewController: UIViewController, UITableViewDelegate, UITableV
             }
             DispatchQueue.main.async {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                    let json = try JSONSerialization.jsonObject(with: dataX!, options: .mutableContainers)
                     for dictionary in json as! [[String : String]]{
-                        self.departmentsArray.append(dictionary["fac_name"] ?? "")
+                        self.departmentsArray.append((dictionary["fac_id"] ?? "", dictionary["fac_name"] ?? ""))
                     }
                     
                 } catch{
@@ -138,5 +154,53 @@ class DepartmentsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.isNavigationBarHidden = false
     }
+    
+//    private func fetchData(departmentId: String){
+//        let url = URL(string: "http://abitir.styleru.net/api/getFacInfo")
+//        var request = URLRequest(url: url!)
+//        request.httpMethod = "POST"
+//        let postString = "fac_id=" + departmentId
+//        request.httpBody = postString.data(using: .utf8)
+//        let task = URLSession.shared.dataTask(with: request) { (data_in, response, error) in
+//            guard data_in != nil, error == nil else{
+//                print("error : \(error)")
+//                return
+//            }
+//            
+//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+//                print("Wrong status code : \(httpStatus.statusCode)")
+//                print("response = \(response)")
+//            }
+//            DispatchQueue.main.async {
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data_in!, options: .mutableContainers)
+//                    
+//                    for dictionary in json as! [[String : Any]]{
+//                        self.data[0].append((dictionary["fac_study_type"] as! String?)!)
+//                        self.data[0].append(dictionary["fac_price"] as! String? ?? "no data")
+//                        self.data[0].append(dictionary["fac_quota"] as! String? ?? "no data")
+//                        self.data[0].append(dictionary["faculty_price"] as! String? ?? "no data")
+//                        
+//                        self.data[1].append(dictionary["fac_program_link"] as! String? ?? "no data")
+//                        self.data[1].append(dictionary["fac_QB_link"] as! String? ?? "no data")
+//                        
+//                        for subject in dictionary["faculty_subject"] as! [[String : String]]{
+//                            self.data[2].append(subject["subj_name"] ?? "" + subject["subj_min_mark"]! )
+//                        }
+//                        
+//                        for subject in dictionary["fac_profession"] as! [[String : String]]{
+//                            self.data[2].append(subject["prof_name"] ?? "")
+//                        }
+//                    }
+//                    
+//                } catch{
+//                    print("Failed parsing")
+//                }
+//                
+//            }
+//            
+//        }
+//        
+//    }
     
 }

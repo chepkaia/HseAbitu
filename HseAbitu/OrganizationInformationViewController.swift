@@ -9,18 +9,23 @@
 import UIKit
 
 class OrganizationInformationViewController: UIViewController {
-
-    @IBOutlet weak var contactButtonTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var contactButton: UIButton!
-    @IBOutlet weak var eventTitle: UILabel!
-    @IBOutlet weak var eventMainText: UILabel!
+    
+    @IBOutlet weak var organizationName: UILabel!
+    @IBOutlet weak var organizationMainText: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var organizationImage: UIImageView!
     
     private var contactButtonWidth : CGFloat = 100
+    internal var organizationInfoData : (id: String, name: String, image: UIImage, mainText: String, link: String)!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.organizationName.text = self.organizationInfoData.name
+        self.organizationName.sizeToFit()
+        self.organizationMainText.text = self.organizationInfoData.mainText
+        self.organizationImage.image = self.organizationInfoData.image
+        self.organizationImage.sizeToFit()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,7 +41,7 @@ class OrganizationInformationViewController: UIViewController {
     }
     
     @objc private func connect(sender : UIButton){
-        let url = URL(string: "https://students.hse.ru/handbook/card/studorg")
+        let url = URL(string: self.organizationInfoData.link)
         UIApplication.shared.open(url!, options: [:], completionHandler: nil)
     }
     
@@ -48,23 +53,23 @@ class OrganizationInformationViewController: UIViewController {
         button.layer.backgroundColor = UIColor.black.cgColor
         button.layer.cornerRadius = 12.0
         button.sizeToFit()
-        button.bounds.size.width *= 3/2
+        button.bounds.size.width *= 2
         self.contactButtonWidth = button.bounds.size.width
         button.addTarget(self, action: #selector(OrganizationInformationViewController.connect(sender:)), for: .touchUpInside)
-        let registerButton = UIBarButtonItem(customView: button)
         
+        let registerButton = UIBarButtonItem(customView: button)
         self.navigationItem.rightBarButtonItem = registerButton
     }
     
     
     private func addBlackLines(){
         let topLine = UIView()
-        topLine.frame = CGRect(x: self.mainView.bounds.size.width - (self.contactButtonWidth + 50), y: self.navigationController!.navigationBar.bounds.size.height, width: self.contactButtonWidth + 50, height: 2)
+        topLine.frame = CGRect(x: self.mainView.bounds.size.width - (self.contactButtonWidth + 30), y: self.navigationController!.navigationBar.bounds.size.height, width: self.contactButtonWidth + 30, height: 2)
         topLine.backgroundColor = UIColor.black
         
         let leftLine = UIView()
         leftLine.backgroundColor = UIColor.black
-        leftLine.frame = CGRect(x: 15, y: self.eventTitle.bounds.size.height + self.navigationController!.navigationBar.bounds.size.height + 50, width: 2, height: self.mainView.bounds.size.height)
+        leftLine.frame = CGRect(x: 15, y: self.organizationName.bounds.size.height + self.navigationController!.navigationBar.bounds.size.height + 30, width: 2, height: self.mainView.bounds.size.height)
         
         self.mainView.addSubview(leftLine)
         self.mainView.addSubview(topLine)

@@ -137,7 +137,6 @@
 		978121271E082372000F9096 /* news_filter */ = {
 			isa = PBXGroup;
 			children = (
-				97782D7D1DE4A5EE0068FBCD /* FilterViewController.swift */,
 				977A5D691DF3416D00FFCB9C /* newsFilter.swift */,
 			);
 			name = news_filter;
@@ -177,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				978121291E083D1C000F9096 /* NewsInformationViewController.swift */,
+				97782D7D1DE4A5EE0068FBCD /* FilterViewController.swift */,
 				978121271E082372000F9096 /* news_filter */,
 				971DDC431DE4448C00C75ED8 /* EventsCollectionViewController.swift */,
 				971DDC451DE45E5500C75ED8 /* EventCollectionViewCell.swift */,
@@ -600,7 +600,7 @@
 				DEVELOPMENT_TEAM = 4RWLL37A47;
 				INFOPLIST_FILE = HseAbitu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "-00wd--wd.HseAbitu";
+				PRODUCT_BUNDLE_IDENTIFIER = net.styleru.HseAbitu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HseAbitu/HseAbitu-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -616,7 +616,7 @@
 				DEVELOPMENT_TEAM = 4RWLL37A47;
 				INFOPLIST_FILE = HseAbitu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "-00wd--wd.HseAbitu";
+				PRODUCT_BUNDLE_IDENTIFIER = net.styleru.HseAbitu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HseAbitu/HseAbitu-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

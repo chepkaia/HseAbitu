@@ -25,17 +25,16 @@ class DepartmentInfoViewController: UIViewController, UITableViewDelegate, UITab
     private var heightConstraintsCalculatedValues : [CGFloat] = [
         0, 0, 0, 0, 0
     ]
-    private var data : [[String]] = [
-        ["Alo", "Alo"],
-        ["Alo", "Alo"],
-        ["Alo", "Alo"],
-        ["Alo", "Alo"],
-        ["Alo", "Alo"]
-    ]
+    
+    internal var departmentName : String!
+    internal var data = [[String]](repeating: [""], count: 5)
+
     
 
     override func viewDidLoad() {
+        self.titleLabel.text = self.departmentName
         firstRunSettup()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +56,7 @@ class DepartmentInfoViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Info Cell") as! DepartmentInfoTableViewCell
+        
         let index = tableViewsCollection.index(of: tableView)!
         self.calculatedValueForTableViewHeightConstraint += cell.bounds.size.height
         
@@ -165,5 +165,6 @@ class DepartmentInfoViewController: UIViewController, UITableViewDelegate, UITab
         
         contentViewHeightConstraint.constant = buttonsCommonHeight * 3/2
     }
+    
 
 }

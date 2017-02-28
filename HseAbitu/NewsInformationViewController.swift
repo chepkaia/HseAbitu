@@ -17,11 +17,12 @@ class NewsInformationViewController: UIViewController {
     @IBOutlet weak var eventContent: UILabel!
     @IBOutlet weak var mainView: UIView!
     
-    private var eventData : (title: String, content: String, date: String, place: String, image: UIImage?)?
-    var registerButtonWidth : CGFloat?
+    internal var eventData : (id: String, title : String, text : String, image : UIImage, place : String, date : String)?
+    private var registerButtonWidth : CGFloat?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        handleData(data: eventData)
         addRegisterButton()
     }
 
@@ -39,7 +40,7 @@ class NewsInformationViewController: UIViewController {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
     }
     
-    func register(sender : UIButton){
+    @objc private func register(sender : UIButton){
         let url = URL(string: "https://www.hse.ru")
         UIApplication.shared.open(url!, options: [:], completionHandler: nil)
     }
@@ -47,12 +48,12 @@ class NewsInformationViewController: UIViewController {
     
     private func addBlackLines(){
         let topLine = UIView()
-        topLine.frame = CGRect(x: self.mainView.bounds.size.width - (registerButtonWidth! + 50), y: 0, width: registerButtonWidth! + 50, height: 2)
+        topLine.frame = CGRect(x: self.mainView.bounds.size.width - (registerButtonWidth! + 30), y: 0, width: registerButtonWidth! + 30, height: 2)
         topLine.backgroundColor = UIColor.black
         
         let leftLine = UIView()
         leftLine.backgroundColor = UIColor.black
-        leftLine.frame = CGRect(x: 10, y: self.eventTitle.bounds.size.height + 20, width: 2, height: self.mainView.bounds.size.height - self.eventTitle.bounds.size.height + 20)
+        leftLine.frame = CGRect(x: 15, y: self.eventTitle.bounds.size.height + 25, width: 2, height: self.mainView.bounds.size.height - self.eventTitle.bounds.size.height + 20)
         
         self.view.addSubview(leftLine)
         self.view.addSubview(topLine)
@@ -74,21 +75,20 @@ class NewsInformationViewController: UIViewController {
     }
     
     
-//    private func dataHandler(data : AnyObject?){
-//        guard data != nil else{
-//            print("Empty Data")
-//            return
-//        }
-//        
-//        data as! (title: String, content: String, date: String, place: String, image: UIImage?)
-//    
-//        self.eventImage.image = data?.image ?? #imageLiteral(resourceName: "Mathematics")
-//        self.eventTitle.text = data?.title ?? "no data"
-//        self.eventContent.text = data?.content ?? "no data"
-//        self.eventPlace.text = data?.place ?? "-"
-//        self.
-//        
-//    }
+    private func handleData(data : (id: String, title : String, text : String, image : UIImage, place : String, date : String)? ){
+        guard data != nil else{
+            print("Empty Data")
+            return
+        }
+    
+        self.eventImage.image = data!.image
+        self.eventTitle.text = data!.title
+        eventTitle.sizeToFit()
+        self.eventContent.text = data!.text
+        self.eventPlace.text = data!.place
+        self.eventDate.text = data!.date
+        
+    }
 
 
 }

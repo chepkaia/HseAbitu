@@ -12,7 +12,7 @@ class DepartmentsDirectionsViewController: UIViewController, UICollectionViewDat
 {
     
     
-    
+    private var navigationBarShadowImage : UIImage?
     private var directionsArray = [(String, UIImage, String)]()
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -21,7 +21,10 @@ class DepartmentsDirectionsViewController: UIViewController, UICollectionViewDat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationBarShadowImage = self.navigationController?.navigationBar.shadowImage
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.isTranslucent = true
+
         self.activityIndicator.layer.zPosition = 10
         if self.revealViewController() != nil {
             menuButton.target = self.revealViewController()
@@ -94,9 +97,9 @@ class DepartmentsDirectionsViewController: UIViewController, UICollectionViewDat
     }
     
     private func fetchDepartmentsDirections(){
-        let url = NSURL(string: "http://abitir.styleru.net/api/getAllDirections")
+        let url = URL(string: "http://abitir.styleru.net/api/getAllDirections")
         self.activityIndicator.startAnimating()
-        URLSession.shared.dataTask(with: url as! URL) { (data, response, error) in
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if error != nil{
                 print("Error")
                 return
@@ -116,14 +119,16 @@ class DepartmentsDirectionsViewController: UIViewController, UICollectionViewDat
                             let imageData = try Data(contentsOf: imageUrl!)
                             let image = UIImage(data: imageData)
                             self.directionsArray.append((name, image!, id))
+
                         } catch{
-                            self.directionsArray.append((name, #imageLiteral(resourceName: "Mathematics"), id))
+                            self.directionsArray.append((name, #imageLiteral(resourceName: "raven_dir"), id))
                             print("Image Parsing Exception")
                         }
                     }
                     
-                    self.activityIndicator.stopAnimating()
+                    
                     self.DepartmentsDirectionsViewController.reloadData()
+                    self.activityIndicator.stopAnimating()
                     
                     
                 } catch{
@@ -144,6 +149,7 @@ class DepartmentsDirectionsViewController: UIViewController, UICollectionViewDat
     }
 
     private func setCommonNavigationBar(){
+        self.navigationController?.navigationBar.shadowImage = self.navigationBarShadowImage
         self.navigationController?.navigationBar.barStyle = .default
         self.navigationController?.view.backgroundColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = UIColor.black
